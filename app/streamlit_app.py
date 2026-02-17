@@ -164,15 +164,24 @@ POPULAR_TICKERS = [
     "INTC", "AMD", "CRM", "PYPL", "UBER",
 ]
 
-st.sidebar.subheader("Add Stocks")
-custom_input = st.sidebar.text_input(
-    "Type a company name or ticker",
-    placeholder="e.g. Apple, Reliance, Adani Power, Bitcoin",
-    help="Enter a **company name** (Apple, Tesla, Adani Power, Bitcoin) or "
-         "a **ticker symbol** (AAPL, RELIANCE.NS, BTC-USD). "
-         "Separate multiple entries with commas.",
-)
+with st.sidebar.form(key="stock_form"):
+    st.subheader("Add Stocks")
+    custom_input = st.text_input(
+        "Type a company name or ticker",
+        placeholder="e.g. Apple, Reliance, Adani Power, Bitcoin",
+        help="Enter a **company name** (Apple, Tesla, Adani Power, Bitcoin) or "
+             "a **ticker symbol** (AAPL, RELIANCE.NS, BTC-USD). "
+             "Separate multiple entries with commas. Press Enter or click Submit.",
+    )
 
+    date_range = st.slider(
+        "Chart Days", 30, 365,
+        value=config["dashboard"].get("default_chart_days", 90),
+    )
+
+    submitted = st.form_submit_button("Submit", type="primary", use_container_width=True)
+
+# Resolve tickers after form submission (or on initial load)
 custom_tickers = []
 if custom_input:
     raw_entries = [e.strip() for e in custom_input.split(",") if e.strip()]
@@ -190,12 +199,7 @@ selected_tickers = st.sidebar.multiselect(
     format_func=display_name,
 )
 
-date_range = st.sidebar.slider(
-    "Chart Days", 30, 365,
-    value=config["dashboard"].get("default_chart_days", 90),
-)
-
-if st.sidebar.button("Refresh Data", type="primary", width="stretch"):
+if st.sidebar.button("🔄 Refresh Data", type="secondary", use_container_width=True):
     st.cache_data.clear()
     st.rerun()
 
@@ -240,10 +244,6 @@ with tab1:
         if not df.empty:
             df = prep.process_dataframe(df)
         return df
-
-    if st.button("🔄 Refresh News", key="refresh_news"):
-        fetch_news.clear()
-        st.rerun()
 
     with st.spinner("Scraping live news from Yahoo, Google News, Reddit & Seeking Alpha..."):
         news_df = fetch_news(tuple(selected_tickers))
