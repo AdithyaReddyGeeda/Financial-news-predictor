@@ -45,7 +45,10 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-CONFIG_PATH = "config.yaml"
+# Resolve project root so relative paths in config.yaml work regardless of cwd
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+os.chdir(PROJECT_ROOT)
+CONFIG_PATH = os.path.join(PROJECT_ROOT, "config.yaml")
 
 
 # ── Dynamic Ticker Lookup via Yahoo Finance Search ────────────────────────
