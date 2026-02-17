@@ -1,0 +1,99 @@
+# ============================================================
+# Financial News Sentiment Stock Predictor - Configuration
+# ============================================================
+
+data:
+  default_tickers:
+    - AAPL
+    - GOOGL
+    - MSFT
+    - AMZN
+    - TSLA
+
+  # Diverse training set across sectors for universal model
+  training_tickers:
+    # Tech
+    - AAPL
+    - GOOGL
+    - MSFT
+    - AMZN
+    - META
+    - NVDA
+    - TSLA
+    - AMD
+    - CRM
+    - INTC
+    # Finance
+    - JPM
+    - BAC
+    - GS
+    - V
+    - MA
+    # Healthcare
+    - JNJ
+    - PFE
+    - UNH
+    # Energy / Industrial
+    - XOM
+    - CVX
+    # Consumer
+    - WMT
+    - KO
+    - DIS
+    - NFLX
+    - NKE
+
+  start_date: "2020-01-01"
+  end_date: null  # null = today
+  kaggle_dataset_path: "dataset/all-data.csv"
+  cache_dir: "data/raw"
+
+news:
+  newsapi_page_size: 100
+  yahoo_rss_base_url: "https://feeds.finance.yahoo.com/rss/2.0/headline"
+  max_articles_per_ticker: 500
+  dedup_similarity_threshold: 0.95
+
+preprocessing:
+  min_headline_length: 10
+  max_headline_length: 512
+
+sentiment:
+  model_name: "ProsusAI/finbert"
+  batch_size: 32
+  max_length: 128
+  aggregation: "mean"  # mean or median for daily sentiment
+
+embeddings:
+  embedding_dim: 768
+  faiss_index_path: "data/embeddings/news_index.faiss"
+  metadata_path: "data/embeddings/metadata.pkl"
+  top_k_similar: 5
+
+technical_indicators:
+  rsi_period: 14
+  macd_fast: 12
+  macd_slow: 26
+  macd_signal: 9
+  bollinger_period: 20
+  bollinger_std: 2
+  atr_period: 14
+
+model:
+  seq_len: 30
+  hidden_size: 128
+  num_layers: 2
+  dropout: 0.3
+  bidirectional: true
+  learning_rate: 0.001
+  batch_size: 64
+  epochs: 100
+  patience: 10
+  train_split: 0.70
+  val_split: 0.15
+  test_split: 0.15
+  checkpoint_dir: "models"
+
+dashboard:
+  refresh_interval_minutes: 15
+  default_chart_days: 90

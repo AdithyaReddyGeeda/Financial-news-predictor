@@ -1,0 +1,36 @@
+# Environment
+.env
+venv/
+env/
+.venv/
+
+# Data (large files)
+data/raw/
+data/processed/
+data/embeddings/
+dataset/
+models/*.pth
+models/*.pt
+models/*.joblib
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Logs
+*.log

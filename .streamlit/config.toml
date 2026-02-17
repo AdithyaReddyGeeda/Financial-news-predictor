@@ -1,0 +1,7 @@
+[theme]
+base = "light"
+primaryColor = "#4CAF50"
+
+[server]
+headless = true
+port = 8501
