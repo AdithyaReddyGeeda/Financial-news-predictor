@@ -251,13 +251,14 @@ with tab1:
     if news_df.empty:
         st.info("No recent news found. Try different stocks or click Refresh.")
     else:
-        @st.cache_data(ttl=900)
-        def run_sentiment(_df):
+        @st.cache_data(ttl=900, show_spinner=False)
+        def run_sentiment(df_hash, _df):
             fb = get_finbert()
             return fb.analyze_dataframe(_df)
 
         with st.spinner("Running FinBERT..."):
-            news_df = run_sentiment(news_df)
+            _sentiment_key = hash(tuple(sorted(selected_tickers)))
+            news_df = run_sentiment(_sentiment_key, news_df)
 
         c1, c2, c3, c4 = st.columns(4)
         c1.metric("Articles", len(news_df))
